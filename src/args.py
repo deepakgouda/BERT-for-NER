@@ -1,6 +1,6 @@
 """
 # Author: Yinghao Li
-# Modified: September 13th, 2023
+# Modified: September 14th, 2023
 # ---------------------------------------
 # Description: arguments and configurations
 """
@@ -76,14 +76,7 @@ class Arguments:
         """
         The device used by this process.
         """
-        try:
-            mps_available = torch.backends.mps.is_available()
-        except AttributeError:
-            mps_available = False
-
-        if mps_available and not self.no_mps:
-            device = "mps"
-        elif not self.no_cuda and torch.cuda.is_available():
+        if not self.no_cuda and torch.cuda.is_available():
             device = "cuda"
         else:
             device = "cpu"
