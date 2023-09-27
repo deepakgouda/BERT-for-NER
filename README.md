@@ -78,4 +78,4 @@ The final `zip` file should not be larger than 50KB.
 
 ## Reference
 
-With default hyper-parameters, each training epoch takes roughly 30s to run on CPU, ~~18s on mps,~~ and 2s on GPU.
+With default hyper-parameters, each training epoch takes roughly 30s to run on Mac M1 CPU, ~~18s on mps,~~ and 2s on Nvidia A5000/RTX4090 GPU.
