@@ -60,7 +60,9 @@ This feature is deprecated as mps sometimes returns incorrect results.
 
 Alternately, you can also run the code with 
 ```bash
-[CUDA_VISIBLE_DEVICES=...] python run.py --name <your name> --gtid <your GTID>[other arguments...]
+[CUDA_VISIBLE_DEVICES=...] python run.py --name <your name> --gtid <your GTID> [other arguments...]
+
+# for example, python run.py --name "George Burdell" --gtid 123456789 --lr 1e5 --batch_size 4096 --n_epochs 4096
 ```
 
 ## Submission

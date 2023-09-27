@@ -1,6 +1,6 @@
 """
 # Author: Yinghao Li
-# Modified: September 14th, 2023
+# Modified: September 26th, 2023
 # ---------------------------------------
 # Description: arguments and configurations
 """
@@ -24,7 +24,7 @@ class Arguments:
     """
 
     # --- student arguments ---
-    name: str = field(default=None, metadata={"help": "name of the student model"})
+    name: str = field(default=None, metadata={"help": "name of the student model", "nargs": "+"})
     gtid: str = field(default=None, metadata={"help": "GTID of the student"})
 
     # --- manage directories and IO ---
@@ -70,6 +70,9 @@ class Arguments:
 
     def __post_init__(self):
         assert osp.isfile(osp.join(self.data_dir, "train.json")), f"Training file does not exist!"
+
+        if isinstance(self.name, list):
+            self.name = " ".join(self.name)
 
     @cached_property
     def device(self) -> str:
