@@ -68,7 +68,7 @@ Alternately, you can also run the code with
 If your code runs successfully, you will see a `record.log` file in your `log` folder suppose you keep the `--log_path` argument as default.
 The log file should track your training status, reporting the training loss, and the validation performance for each training epoch, and the final test performance.
 
-For this assignment, you should submit a `ner.<GivenName>.<FamilyName>.<GTID>.zip` file containing `./src/` and `./log/` folders and all their contents.
+For this assignment, you should submit a `ner.<GivenName>.<FamilyName>.<GTID>.zip` (e.g. `ner.George.Burdell.123456789.zip`) file containing `./src/` and `./log/` folders and all their contents.
 **Do not include `./data/`, `.gitignore`, `LICENSE` or other files or folders.**
 If your using Unix-like systems, you can run
 ```bash
