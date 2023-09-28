@@ -20,7 +20,7 @@ It collates the instances in each sampled batch so that they meet the BERT model
 - `src.train.Trainer.training_step`: for model finetuning.
 The part to be completed concerns the weight updating and loss tracking.
 - `src.train.Trainer.get_loss`: for loss calculation.
-- `src.train.Trainer.evaluate`: for model evaluatin.
+- `src.train.Trainer.evaluate`: for model evaluation.
 The part to be completed concerns model inference.
 
 For detailed description and requirment, please check the annotation before each `TODO` block.
