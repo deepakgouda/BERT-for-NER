@@ -145,7 +145,14 @@ class Trainer:
             # Do backpropagation and update the model parameters, and track the training loss.
             # `train_loss` is the summarized loss for all tokens involved in backpropagation.
             # --- TODO: start of your code ---
-
+            self._optimizer.zero_grad()
+            loss.backward()
+            train_loss += loss.item()
+            
+            self._optimizer.step()
+            self._scheduler.step()
+            n_tks += len(batch.input_ids)
+            # n_tks += batch.attention_mask.sum().item()
             # --- TODO: end of your code ---
 
         return train_loss / n_tks
@@ -169,7 +176,8 @@ class Trainer:
         # Compute the loss for the batch of data.
         # Your result should match the result from `outputs.loss`.
         # --- TODO: start of your code ---
-
+        num_labels = self._config.n_lbs
+        return self._loss(logits.view(-1, num_labels), lbs.view(-1))
         # --- TODO: end of your code ---
 
     def eval_and_save(self):
@@ -197,7 +205,27 @@ class Trainer:
         # TODO: Predicted labels for each sample in the dataset and stored in `pred_lbs`, a list of list of strings.
         # TODO: The string elements represent the enitity labels, such as "O" or "B-PER".
         # --- TODO: start of your code ---
-
+        curr_lbs = []
+        with torch.no_grad():
+            for batch in tqdm(data_loader):
+                batch.to(self._device)
+                outputs = self._model(input_ids=batch.input_ids, attention_mask=batch.attention_mask)
+                batch_mask = batch.attention_mask.repeat(self._config.n_lbs,1,1).permute(1,2,0)
+                logits = outputs.logits.mul(batch_mask)
+                pred = torch.argmax(logits, dim=2)
+                pred_lb_list = []
+                for i in range(pred.size(0)):
+                    curr_pred = [label.item() for label in pred[i]]
+                    pred_lb_list.append([self._config.bio_label_types[idx] for idx in curr_pred])
+                curr_lbs.extend(pred_lb_list)
+        pred_lbs = []
+        for idx in range(len(dataset.lbs)):
+            filtered_pred = []
+            for j in range(len(dataset._bert_lbs[idx])):
+                if dataset._bert_lbs[idx][j] != MASKED_LB_ID:
+                    filtered_pred.append(curr_lbs[idx][j])
+            pred_lbs.append(filtered_pred)
+        pred_lbs = [pred_lb[:len(dataset.lbs[i])] for i, pred_lb in enumerate(pred_lbs)]
         # --- TODO: end of your code ---
 
         metric = get_ner_metrics(dataset.lbs, pred_lbs, detailed=detailed)

@@ -117,6 +117,18 @@ class Dataset(torch.utils.data.Dataset):
         # You should store the updated label sequence in the `bert_lbs_list` variable.
         # --- TODO: start of your code ---
 
+        for idx, encodings in enumerate(tokenized_text._encodings):
+            bert_lbs = []
+            labels = self._lbs[idx]
+            for token_id, word_id in enumerate(encodings.word_ids):
+                if word_id is None:
+                    bert_lbs.append(MASKED_LB_ID)
+                elif encodings.tokens[token_id].startswith("##"):
+                    bert_lbs.append(MASKED_LB_ID)
+                else:
+                    bert_lbs.append(lb2idx[labels[word_id]])
+            bert_lbs_list.append(bert_lbs)
+
         # --- TODO: end of your code ---
 
         for tks, lbs in zip(self._token_ids, bert_lbs_list):
